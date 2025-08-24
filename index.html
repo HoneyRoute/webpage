@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creator Hub — Videos & Gallery</title>
+  <meta name="description" content="A clean, mobile‑first creator hub with video links, gallery, and subscribe form. 18+ only." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0b10; --card:#12121a; --muted:#9aa0a6; --text:#e8eaed; --brand:#8b5cf6; --brand2:#22d3ee; --ring: rgba(139,92,246,0.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text);}
+    a{color:inherit; text-decoration:none}
+    img{display:block; max-width:100%; height:auto;}
+    .container{width:min(1100px, 92%); margin-inline:auto}
+
+    /* Header */
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.2) blur(8px); background:linear-gradient(180deg, rgba(10,10,15,0.9), rgba(10,10,15,0.6)); border-bottom:1px solid rgba(255,255,255,0.06)}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; gap:10px; align-items:center}
+    .logo{width:32px; height:32px; border-radius:10px; background:linear-gradient(135deg,var(--brand),var(--brand2)); display:grid; place-items:center; font-weight:800}
+    .brand h1{font-size:16px; letter-spacing:.2px; margin:0}
+    .menu{display:flex; gap:16px; align-items:center}
+    .menu a{font-size:14px; color:var(--muted)}
+    .menu a:hover{color:#fff}
+    .cta{padding:8px 12px; border-radius:12px; background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#0b0b10; font-weight:700}
+
+    /* Hero */
+    .hero{position:relative; overflow:hidden;}
+    .hero-inner{display:grid; grid-template-columns:1.2fr .8fr; gap:28px; align-items:center; padding:44px 0 28px}
+    .hero .card{background: radial-gradient(1200px 400px at 0% -10%, rgba(139,92,246,0.25), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.06); border-radius:20px; padding:22px}
+    .hero h2{font-size:34px; line-height:1.1; margin:0 0 10px}
+    .hero p{color:var(--muted); margin:0 0 16px}
+    .chips{display:flex; flex-wrap:wrap; gap:10px}
+    .chip{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,0.12); color:#cbd5e1}
+    .social{display:flex; gap:10px; margin-top:14px}
+    .social a{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:12px; background:#1a1a24; border:1px solid rgba(255,255,255,0.06)}
+    .social a:hover{outline:2px solid var(--ring)}
+
+    /* Video grid */
+    .section-title{display:flex; align-items:center; justify-content:space-between; margin:28px 0 14px}
+    .section-title h3{margin:0; font-size:20px}
+    .grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:16px}
+    .card{background:var(--card); border:1px solid rgba(255,255,255,0.06); border-radius:16px; overflow:hidden}
+    .thumb{position:relative; aspect-ratio:16/9; background:#0f0f16}
+    .thumb .badge{position:absolute; left:10px; top:10px; font-size:12px; padding:6px 8px; border-radius:999px; background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,0.1)}
+    .thumb button{position:absolute; inset:0; border:0; background:transparent; cursor:pointer}
+    .meta{padding:12px 14px; display:grid; gap:6px}
+    .meta h4{margin:0; font-size:15px; line-height:1.25}
+    .meta p{margin:0; font-size:13px; color:var(--muted)}
+    .actions{display:flex; gap:8px; margin-top:10px}
+    .btn{font-size:13px; padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:#171722}
+    .btn:hover{outline:2px solid var(--ring)}
+
+    /* Gallery */
+    .masonry{columns:3 280px; column-gap:14px}
+    .masonry .mcard{break-inside:avoid; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); margin:0 0 14px; background:#0f0f16}
+
+    /* Subscribe */
+    .subscribe{margin:34px 0; display:grid; grid-template-columns:1.1fr .9fr; gap:18px; align-items:center}
+    .subscribe .panel{background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03)); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:18px}
+    .subscribe h4{margin:0 0 8px}
+    form{display:flex; gap:10px}
+    input[type=email]{flex:1; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:#0c0c13; color:var(--text)}
+    button[type=submit]{padding:12px 16px; border-radius:12px; border:0; background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#0b0b10; font-weight:800; cursor:pointer}
+
+    /* Compliance */
+    .compliance{margin:28px 0; font-size:12px; color:#b9bec7}
+    .compliance .box{background:#101018; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px}
+
+    /* Footer */
+    footer{margin:28px 0 60px; color:#a3a8b1; font-size:13px; display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center}
+
+    /* Lightbox */
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.9); display:none; align-items:center; justify-content:center; flex-direction:column; z-index:80}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:min(92vw,1100px); max-height:80vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .lightbox .caption{margin-top:10px; color:#cfd3da}
+    .lightbox .nav{position:absolute; inset:0; display:flex; justify-content:space-between; align-items:center; padding:18px}
+    .lightbox .nav button{background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:#fff; padding:10px 14px; border-radius:12px; cursor:pointer}
+
+    /* Age Gate */
+    .agegate{position:fixed; inset:0; background:rgba(10,10,15,.96); display:flex; align-items:center; justify-content:center; z-index:100}
+    .agecard{width:min(560px,92%); background:#12121a; border:1px solid rgba(255,255,255,0.1); border-radius:18px; padding:22px; text-align:center}
+    .agecard h3{margin:8px 0}
+    .agecard p{color:#c1c6cf}
+    .agecard .row{display:flex; gap:10px; justify-content:center; margin-top:14px}
+    .agecard button{padding:10px 14px; border-radius:12px; border:0; cursor:pointer}
+    .agree{background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#0b0b10; font-weight:800}
+    .leave{background:#1a1a24; color:#d4d7dd}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero-inner{grid-template-columns:1fr;}
+      .subscribe{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 640px){
+      .menu{display:none}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- Age Gate -->
+  <div class="agegate" id="agegate" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
+    <div class="agecard">
+      <div class="logo" style="margin-inline:auto">18+</div>
+      <h3 id="ageTitle">Adults‑Only Website</h3>
+      <p>This site contains mature themes intended for audiences 18 years or older. By clicking <strong>Enter</strong>, you confirm you are of legal age in your jurisdiction.</p>
+      <div class="row">
+        <button class="leave" onclick="window.location.href='https://www.google.com'">Leave</button>
+        <button class="agree" onclick="enterSite()">Enter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">CH</div>
+        <h1>Creator Hub</h1>
+      </div>
+      <nav class="menu">
+        <a href="#videos">Videos</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#subscribe">Subscribe</a>
+        <a href="#compliance">Compliance</a>
+        <a class="cta" href="#videos">Watch Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="card">
+        <h2>High‑Quality Creator Videos & Photo Sets</h2>
+        <p>Browse recent releases, follow on social, and support directly on your favorite platforms. Clean, fast, mobile‑first. 18+ only.</p>
+        <div class="chips" aria-label="categories">
+          <span class="chip">HD/4K</span>
+          <span class="chip">Updates Weekly</span>
+          <span class="chip">Creator‑Owned</span>
+        </div>
+        <div class="social" style="margin-top:14px">
+          <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 5.8c-.6.3-1.2.5-1.9.6.7-.4 1.2-1.1 1.5-1.9-.7.4-1.4.7-2.2.9A3.3 3.3 0 0 0 12 7.9c0 .3 0 .5.1.8-4.2-.2-7.9-2.2-10.4-5.2-.4.7-.6 1.5-.6 2.4 0 1.6.8 3 2 3.8-.6 0-1.2-.2-1.7-.5v.1c0 2.3 1.6 4.2 3.8 4.6-.4.1-.8.2-1.2.2-.3 0-.6 0-.9-.1.6 2 2.5 3.4 4.7 3.4A9.3 9.3 0 0 1 2 19.5 13 13 0 0 0 9 21.5c7.8 0 12.1-6.6 12.1-12.3v-.6c.8-.6 1.4-1.2 1.9-1.9z" fill="currentColor"/></svg> Follow</a>
+          <a href="#" aria-label="Store"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6h16l-1.2 9.5a3 3 0 0 1-3 2.5H8.2a3 3 0 0 1-3-2.5L4 6zm3 11.5V21m10-3.5V21" stroke="currentColor" stroke-width="1.6"/></svg> Store</a>
+          <a href="#subscribe" class="cta" style="text-decoration:none">Subscribe</a>
+        </div>
+      </div>
+      <div class="card">
+        <video controls preload="metadata" poster="https://images.unsplash.com/photo-1524255684952-d7185b509571?q=80&w=1200&auto=format&fit=crop">
+          <source src="sample-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- Videos Grid -->
+  <section id="videos" class="container">
+    <div class="section-title">
+      <h3>Latest Videos</h3>
+      <a class="btn" href="#">See all videos</a>
+    </div>
+    <div class="grid">
+      <!-- Card 1 -->
+      <article class="card">
+        <div class="thumb">
+          <img src="https://images.unsplash.com/photo-1518112166137-85f9979a2e5b?q=80&w=1400&auto=format&fit=crop" alt="Video thumbnail 1" />
+          <span class="badge">NEW</span>
+          <button aria-label="Open video 1"></button>
+        </div>
+        <div class="meta">
+          <h4>Feature Release #01</h4>
+          <p>Duration 12:32 · 4K</p>
+          <div class="actions">
+            <a class="btn" href="#">Watch on Platform</a>
+            <a class="btn" href="#">Preview</a>
+          </div>
+        </div>
+      </article>
+      <!-- Card 2 -->
+      <article class="card">
+        <div class="thumb">
+          <img src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=1400&auto=format&fit=crop" alt="Video thumbnail 2" />
+          <span class="badge">HD</span>
+          <button aria-label="Open video 2"></button>
+        </div>
+        <div class="meta">
+          <h4>Behind the Scenes #02</h4>
+          <p>Duration 08:05 · 1080p</p>
+          <div class="actions">
+            <a class="btn" href="#">Watch on Platform</a>
+            <a class="btn" href="#">Preview</a>
+          </div>
+        </div>
+      </article>
+      <!-- Card 3 -->
+      <article class="card">
+        <div class="thumb">
+          <img src="https://images.unsplash.com/photo-1520975693416-35b88b3d74cd?q=80&w=1400&auto=format&fit=crop" alt="Video thumbnail 3" />
+          <span class="badge">4K</span>
+          <button aria-label="Open video 3"></button>
+        </div>
+        <div class="meta">
+          <h4>Creator Collab #03</h4>
+          <p>Duration 16:44 · 4K</p>
+          <div class="actions">
+            <a class="btn" href="#">Watch on Platform</a>
+            <a class="btn" href="#">Preview</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Gallery / Masonry -->
+  <section id="gallery" class="container" style="margin-top:28px">
+    <div class="section-title">
+      <h3>Photo Gallery</h3>
+      <div style="display:flex; gap:8px">
+        <button class="btn" onclick="openLightbox(0)">Open Lightbox</button>
+        <a class="btn" href="#">Download Set</a>
+      </div>
+    </div>
+    <div class="masonry" id="galleryGrid">
+      <!-- JS will populate cards -->
+    </div>
+  </section>
+
+  <!-- Subscribe -->
+  <section id="subscribe" class="container subscribe">
+    <div class="panel">
+      <h4>Subscribe for Updates</h4>
+      <p>Get email alerts when new videos and photo sets drop. No spam, unsubscribe any time.</p>
+      <form onsubmit="event.preventDefault(); subscribe()">
+        <label class="sr-only" for="email">Email</label>
+        <input required id="email" type="email" placeholder="you@example.com" />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p id="subMsg" style="color:#9ee6f1; margin-top:8px; display:none">Thanks! Check your inbox.</p>
+    </div>
+    <div class="panel">
+      <h4>Tip / Support</h4>
+      <p>Support the creator and unlock extras on your favorite platforms.</p>
+      <div class="actions">
+        <a class="btn" href="#">Store</a>
+        <a class="btn" href="#">Fan Page</a>
+        <a class="btn" href="#">Merch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compliance -->
+  <section id="compliance" class="container compliance">
+    <div class="box">
+      <strong>Legal & Compliance</strong>
+      <p>All persons featured are confirmed to be 18 years of age or older at the time of content creation. This website is a portfolio/hub linking to third‑party platforms. Records required by 18 U.S.C. §2257 and 28 C.F.R. 75 are maintained by the designated records custodian and available upon request.</p>
+      <p>By accessing this site, you agree to our terms and certify you are of legal age in your jurisdiction.</p>
+      <p>For record requests or DMCA, contact: <a href="mailto:records@example.com">records@example.com</a></p>
+    </div>
+  </section>
+
+  <footer class="container">
+    <span>© <span id="yr"></span> Creator Hub. All rights reserved.</span>
+    <div style="display:flex; gap:10px">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog">
+    <div class="nav">
+      <button id="prevBtn" aria-label="Previous">◀</button>
+      <button id="closeBtn" aria-label="Close">✕</button>
+      <button id="nextBtn" aria-label="Next">▶</button>
+    </div>
+    <img id="lbImg" alt="Gallery image" />
+    <div class="caption" id="lbCap">Caption</div>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Age Gate
+    function enterSite(){
+      localStorage.setItem('ageConfirmed','yes');
+      document.getElementById('agegate').style.display='none';
+    }
+    (function(){ if(localStorage.getItem('ageConfirmed')==='yes'){ document.getElementById('agegate').style.display='none'; } })();
+
+    // Gallery data
+    const photos = [
+      {src:'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop', cap:'Studio Set A'},
+      {src:'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=1200&auto=format&fit=crop', cap:'City Night'},
+      {src:'https://images.unsplash.com/photo-1520975693416-35b88b3d74cd?q=80&w=1200&auto=format&fit=crop', cap:'Backstage'},
+      {src:'https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=1200&auto=format&fit=crop', cap:'Portrait'},
+      {src:'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1200&auto=format&fit=crop', cap:'Monochrome'},
+      {src:'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=1200&auto=format&fit=crop', cap:'Minimal Set'},
+    ];
+
+    // Populate masonry
+    const grid = document.getElementById('galleryGrid');
+    photos.forEach((p,i)=>{
+      const card = document.createElement('div');
+      card.className = 'mcard';
+      const img = document.createElement('img');
+      img.src = p.src; img.alt = p.cap; img.loading = 'lazy'; img.style.cursor='zoom-in';
+      img.addEventListener('click', ()=> openLightbox(i));
+      card.appendChild(img); grid.appendChild(card);
+    });
+
+    // Lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCap = document.getElementById('lbCap');
+    let idx = 0;
+    function openLightbox(i){ idx = i; renderLB(); lb.classList.add('open'); }
+    function renderLB(){ lbImg.src = photos[idx].src; lbCap.textContent = photos[idx].cap; }
+    function closeLB(){ lb.classList.remove('open'); }
+    function next(){ idx = (idx+1)%photos.length; renderLB(); }
+    function prev(){ idx = (idx-1+photos.length)%photos.length; renderLB(); }
+    document.getElementById('closeBtn').onclick = closeLB;
+    document.getElementById('nextBtn').onclick = next;
+    document.getElementById('prevBtn').onclick = prev;
+    lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLB(); });
+    document.addEventListener('keydown', (e)=>{
+      if(!lb.classList.contains('open')) return;
+      if(e.key==='Escape') closeLB();
+      if(e.key==='ArrowRight') next();
+      if(e.key==='ArrowLeft') prev();
+    });
+
+    // Subscribe (demo)
+    function subscribe(){
+      const input = document.getElementById('email');
+      if(!input.value) return; 
+      document.getElementById('subMsg').style.display='block';
+      input.value='';
+    }
+  </script>
+</body>
+</html>
